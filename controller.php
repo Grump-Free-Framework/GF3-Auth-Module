@@ -2,15 +2,15 @@
 namespace modules\auth;
 class controller extends \Controller {
 
-    protected $successfulLoginPath = "/empty_module";
-
 	public function get() {
         $this->f3->reroute("/{$this->f3->module}/login");
 	}
 
     public function login() {
 
-        $this->RedirectIfLoggedIn();
+        $this->redirectIfLoggedIn();
+
+		$this->f3->set('fields', $this->settings->login_fields);
 
         $this->RenderView('login');
 
@@ -18,29 +18,26 @@ class controller extends \Controller {
 
     public function register() {
 
-        $this->RedirectIfLoggedIn();
+        $this->redirectIfLoggedIn();
+
+		$this->f3->set('fields', $this->settings->register_fields);
 
         $this->RenderView('register');
 
     }
 
-    public function register_post() {
+    public function registerPost() {
 
+        $Registration = $this->loadModel('Registration');
 
+        $Registration->validateRegistration($_POST);
 
     }
 
-    public function HandleBeforeRoute() {
-        //requires PHP sessions to start, so always start session if it hasn't already been started.
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    }
-
-    private function RedirectIfLoggedIn() {
+    private function redirectIfLoggedIn() {
         if(!empty($_SESSION['user'])) {
 
-            $path = $this->settings->successfulLoginPath;
+            $path = $this->settings->successful_login_path;
             if($path == 'default') {
                 $path = $this->f3->get('defaultModule');
             }
