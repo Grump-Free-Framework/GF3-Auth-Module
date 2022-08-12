@@ -1,5 +1,6 @@
 {
     "successful_login_path": "default",
+    "database_columns_for_user_session": ["uid", "username"],
     "register_fields": {
         "username": {
             "type": "text",
@@ -20,7 +21,7 @@
     "login_fields": {
         "identifier": {
             "type": "text",
-            "text": "Username or Email",
+            "label": "Username or Email",
             "required": true
         },
         "password": {

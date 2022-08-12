@@ -1,20 +1,6 @@
 <h1>Log In</h1>
-<form class="ui form">
-
-    <repeat group="{{ @fields }}" key="{{ @field }}" value="{{ @field_data }}">
-        <set readable="{{ @field_data->label ?: ucwords(str_replace('_', ' ', @field)) }}"/>
-        <set required="{{ @field_data->required ?: false }}"/>
-        <div class="field">
-            <label>
-                {{ @readable }}
-                <check if="{{ @required }}">
-                    {{ '<span class="ui red text">*</span>' }}
-                </check>
-            </label>
-            <input type="{{ @field_data->type }}" name="{{ @field }}" placeholder="{{ @readable }}" {{ @required ? 'required' : '' }}>
-        </div>
-    </repeat>
-
+<form method="POST" action="loginPost" class="ui form">
+    <include href="{{ @module . '/views/form.htm' }}" />
     <button class="ui primary button" type="submit">Log In</button>
     <a href="register" class="ui right floated secondary button" type="submit">Register</a>
 </form>

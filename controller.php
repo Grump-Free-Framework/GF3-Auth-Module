@@ -3,7 +3,7 @@ namespace modules\auth;
 class controller extends \Controller {
 
 	public function get() {
-        $this->f3->reroute("/{$this->f3->module}/login");
+        $this->reroute("/login", SELF::REROUTE_MODULE);
 	}
 
     public function login() {
@@ -16,7 +16,7 @@ class controller extends \Controller {
 
     }
 
-    public function register() {
+	public function register() {
 
         $this->redirectIfLoggedIn();
 
@@ -26,22 +26,43 @@ class controller extends \Controller {
 
     }
 
+	public function loginPost() {
+
+		$this->redirectIfLoggedIn();
+
+		$login = $this->loadModel('Login');
+
+		if(is_array($response = $login->loginUser($_POST))) {
+			$this->redirectIfLoggedIn();
+		} else {
+			$this->reroute("/login?error={$response}", SELF::REROUTE_MODULE);
+		}
+
+	}
+
     public function registerPost() {
 
-        $Registration = $this->loadModel('Registration');
+        $registration = $this->loadModel('Registration');
 
-        $Registration->validateRegistration($_POST);
+		if(($response = $registration->registerUser($_POST)) === true) {
+			$this->loginPost();
+		} else {
+			$this->reroute("/register?error={$response}", SELF::REROUTE_MODULE);
+		}
 
     }
 
+	public function logout() {
+		unset($_SESSION['user']);
+		$this->reroute('/login', SELF::REROUTE_MODULE);
+	}
+
     private function redirectIfLoggedIn() {
         if(!empty($_SESSION['user'])) {
-
             $path = $this->settings->successful_login_path;
             if($path == 'default') {
                 $path = $this->f3->get('defaultModule');
             }
-
             $this->f3->reroute($path);
         }
     }

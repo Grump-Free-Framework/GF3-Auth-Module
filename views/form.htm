@@ -1,0 +1,22 @@
+<check if="{{ @GET.error }}">
+    <div class="ui negative message">
+        <i class="close icon"></i>
+        <div class="header">
+            Error
+        </div>
+        <p>{{ @GET.error }}</p>
+    </div>
+</check>
+<repeat group="{{ @fields }}" key="{{ @field }}" value="{{ @field_data }}">
+    <set readable="{{ @field_data->label ?: ucwords(str_replace('_', ' ', @field)) }}"/>
+    <set required="{{ @field_data->required ?: false }}"/>
+    <div class="field">
+        <label>
+            {{ @readable }}
+            <check if="{{ @required }}">
+                {{ '<span class="ui red text">*</span>' }}
+            </check>
+        </label>
+        <input type="{{ @field_data->type }}" name="{{ @field }}" placeholder="{{ @readable }}" {{ @required ? 'required' : '' }}>
+    </div>
+</repeat>
