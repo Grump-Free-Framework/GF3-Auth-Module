@@ -12,7 +12,7 @@ class controller extends \Controller {
 
 		$this->f3->set('fields', $this->settings->login_fields);
 
-        $this->RenderView('login');
+        $this->renderView('login');
 
     }
 
@@ -22,7 +22,7 @@ class controller extends \Controller {
 
 		$this->f3->set('fields', $this->settings->register_fields);
 
-        $this->RenderView('register');
+        $this->renderView('register');
 
     }
 
